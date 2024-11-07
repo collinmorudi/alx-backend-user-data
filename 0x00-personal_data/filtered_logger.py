@@ -107,3 +107,33 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         host=host,
         database=database
     )
+
+
+def main():
+    """
+    Main function that retrieves and logs user data from the database, with
+    sensitive information redacted.
+    """
+    db = get_db()
+    cursor = db.cursor()
+
+    # Retrieve all rows in the users table
+    cursor.execute("SELECT * FROM users;")
+    rows = cursor.fetchall()
+
+    # Get column names to properly format each row
+    columns = [column[0] for column in cursor.description]
+
+    logger = get_logger()
+
+    # Format each row as a message with redacted fields
+    for row in rows:
+        row_data = "; ".join(f"{col}={val}" for col, val in zip(columns, row))
+        logger.info(row_data)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
