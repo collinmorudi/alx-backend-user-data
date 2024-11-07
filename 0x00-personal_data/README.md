@@ -42,10 +42,6 @@ At the end of this project, you are expected to be able to explain the following
 ## Tasks
 
 ### 0. Regex-ing
-Write a function called `filter_datum` that returns the log message obfuscated:
-```python
-import re
+Write a function called `filter_datum` that returns the log message obfuscated
 
-def filter_datum(fields, redaction, message, separator):
-    regex = '|'.join([f'({field}=[^;]*)' for field in fields])
-    return re.sub(regex, f'{redaction}', message)
+## More info will be added
