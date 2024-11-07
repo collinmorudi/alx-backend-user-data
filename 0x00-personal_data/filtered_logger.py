@@ -1,49 +1,25 @@
 #!/usr/bin/env python3
-"""0.Regex-ing"""
-
+"""
+This module contains a function to obfuscate sensitive fields in log messages.
+"""
 
 import re
-import logging
+from typing import List
 
 
-def filter_datum(fields, redaction, message, separator):
-    """todo"""
-    regex = '|'.join([f'({field}=[^;]*)' for field in fields])
-    return re.sub(regex, f'{redaction}', message)
+def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+    """
+    Obfuscates sensitive information in a log message by replacing specified
+    field values with a redaction string.
 
+    Args:
+        fields (List[str]): List of fields to obfuscate.
+        redaction (str): The string used to replace sensitive field values.
+        message (str): The log line containing the data.
+        separator (str): The character separating fields in the log line.
 
-class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class """
-    REDACTION = "***"
-    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = ";"
-
-    def __init__(self, fields):
-        super(RedactingFormatter, self).__init__(self.FORMAT)
-        self.fields = fields
-
-    def format(self, record: logging.LogRecord) -> str:
-        message = record.getMessage()
-        return super().format(record)._style._fmt % self.filter_datum(self.fields, self.REDACTION, message, self.SEPARATOR)
-
-    @staticmethod
-    def filter_datum(fields, redaction, message, separator):
-        regex = '|'.join([f'({field}=[^;]*)' for field in fields])
-        return re.sub(regex, f'{redaction}', message)
-
-
-PII_FIELDS = ("email", "ssn", "password", "date_of_birth", "name")
-
-
-def get_logger():
-    """todo"""
-    logger = logging.getLogger("user_data")
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    formatter = RedactingFormatter(PII_FIELDS)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-    return logger
+    Returns:
+        str: The log message with sensitive fields obfuscated.
+    """
+    pattern = f"({'|'.join(fields)})=([^ {separator}]+)"
+    return re.sub(pattern, lambda m: f"{m.group(1)}={redaction}", message)
