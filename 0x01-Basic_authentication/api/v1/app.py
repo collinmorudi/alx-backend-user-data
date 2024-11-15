@@ -23,21 +23,25 @@ if auth_type == 'auth':
 elif auth_type == 'basic_auth':
     auth = BasicAuth()
 
+
 # Error handlers
 @app.errorhandler(404)
 def not_found(error) -> str:
     """Not found handler."""
     return jsonify({"error": "Not found"}), 404
 
+
 @app.errorhandler(401)
 def unauthorized(error) -> str:
     """Unauthorized handler."""
     return jsonify({"error": "Unauthorized"}), 401
 
+
 @app.errorhandler(403)
 def forbidden(error) -> str:
     """Forbidden handler."""
     return jsonify({"error": "Forbidden"}), 403
+
 
 # Before request hook
 @app.before_request

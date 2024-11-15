@@ -84,7 +84,6 @@ class BasicAuth(Auth):
                 return users[0]
         return None
 
-
     def current_user(self, request=None) -> TypeVar('User'):
         """Retrieves the authenticated user from the request.
 

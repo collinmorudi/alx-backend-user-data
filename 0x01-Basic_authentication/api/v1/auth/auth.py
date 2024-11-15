@@ -19,10 +19,13 @@ class Auth:
 
         Args:
             path: The path to check.
-            excluded_paths: A list of paths that are excluded from authentication.
+            excluded_paths: A list of paths that are excluded from
+            authentication.
                 Paths can include wildcards:
-                    - '*' matches any characters (e.g., '/api/v1/*' matches all paths under '/api/v1/')
-                    - '/' at the end acts as a wildcard for the next path segment (e.g., '/api/v1/' matches '/api/v1/users')
+                    - '*' matches any characters (e.g., '/api/v1/*' matches
+                    all paths under '/api/v1/')
+                    - '/' at the end acts as a wildcard for the next path
+                    segment (e.g., '/api/v1/' matches '/api/v1/users')
 
         Returns:
             True if the path requires authentication, False otherwise.
@@ -31,11 +34,11 @@ class Auth:
             for exclusion_path in map(lambda x: x.strip(), excluded_paths):
                 # Build a regular expression pattern from the exclusion path
                 if exclusion_path.endswith('*'):
-                    pattern = f'{exclusion_path[:-1]}.*'  # Match any characters after the *
+                    pattern = f'{exclusion_path[:-1]}.*'
                 elif exclusion_path.endswith('/'):
-                    pattern = f'{exclusion_path[:-1]}/.*'  # Match any characters after the /
+                    pattern = f'{exclusion_path[:-1]}/.*'
                 else:
-                    pattern = f'{exclusion_path}/.*'  # Match any characters in the next segment
+                    pattern = f'{exclusion_path}/.*'
 
                 # Check if the path matches the pattern
                 if re.match(pattern, path):
@@ -62,6 +65,7 @@ class Auth:
             request: The Flask request object.
 
         Returns:
-            The User object representing the current user, or None if not authenticated.
+            The User object representing the current user, or None if
+            not authenticated.
         """
         return None  # This will be implemented in subclasses
